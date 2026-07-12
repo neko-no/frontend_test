@@ -1,8 +1,24 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { DelayedMessage } from './delayedMessage';
 
-test('非同期処理の結果、正しいメッセージが表示される', async () => {
-  render(<DelayedMessage />);
-  expect(screen.getByText('Loading...')).toBeInTheDocument();
-  expect(await screen.findByText('Hello World!')).toBeInTheDocument();
+describe('DelayedMessage', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.clearAllTimers();
+    vi.useRealTimers();
+  });
+
+  test('非同期処理の結果、正しいメッセージが表示される', () => {
+    render(<DelayedMessage />);
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    expect(screen.getByText('Hello World!')).toBeInTheDocument();
+  });
 });
