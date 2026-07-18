@@ -22,3 +22,12 @@ test('ボタン要素が表示されている', async ({ page }) => {
   const button = page.getByRole('button', { name: 'Count' });
   await expect(button).toBeVisible();
 });
+
+test('ボタンをクリックするとカウントアップする', async ({ page }) => {
+  await page.goto('/');
+
+  const button = page.getByRole('button', { name: 'Count' });
+  await button.click();
+
+  await expect(page.getByText('Count is 1')).toBeVisible();
+});
