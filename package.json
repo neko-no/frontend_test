@@ -11,6 +11,9 @@
     "lint:css": "stylelint \"src/**/*.{css,scss}\"",
     "lint:css:fix": "stylelint \"src/**/*.{css,scss}\" --fix",
     "test": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
     "preview": "vite preview"
   },
   "dependencies": {
