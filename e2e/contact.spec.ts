@@ -49,7 +49,42 @@ test('必須フィールドが未入力の場合はエラーメッセージが�
     page.getByText('お問い合わせ内容を入力してください'),
   ).toBeVisible();
 
+  await expect(page.getByText('送信が完了しました')).not.toBeVisible();
+});
+
+test('エラー解消後に正常に送信できる', async ({ page }) => {
+  // API レスポンスをモック化して成功レスポンスを返す
+  await page.route('/api/contact', async (route) => {
+    // ローディングスピナーを確実に観測できるよう少し遅延させる
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ ok: true }),
+    });
+  });
+
+  await page.goto('/contact');
+
+  await page.getByLabel('メールアドレス').fill('invalid-email');
+
+  await page.getByRole('button', { name: '送信' }).click();
+
+  // 各フィールドにエラーメッセージが表示されているかを確認
   await expect(
-    page.getByTitle('お問い合わせを受け付けました'),
+    page.getByText('正しいメールアドレスを入力してください'),
+  ).toBeVisible();
+
+  // 正しい入力を行う
+  await page.getByLabel('お名前').fill('山田太郎');
+  await page.getByLabel('メールアドレス').fill('yamada@example.com');
+  await page.getByLabel('お問い合わせ内容').fill('テスト送信です');
+
+  await page.getByRole('button', { name: '送信' }).click();
+  await expect(
+    page.getByText('正しいメールアドレスを入力してください'),
   ).not.toBeVisible();
+  await expect(
+    page.getByText('お問い合わせを受け付けました。ありがとうございます。'),
+  ).toBeVisible();
 });
