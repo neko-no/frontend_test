@@ -35,3 +35,21 @@ test('フォームに入力ができる', async ({ page }) => {
 
   await expect(page.getByLabel('お名前')).toHaveValue('');
 });
+
+test('必須フィールドが未入力の場合はエラーメッセージが表示される', async ({
+  page,
+}) => {
+  await page.goto('/contact');
+
+  await page.getByRole('button', { name: '送信' }).click();
+
+  // 各フィールドにエラーメッセージが表示されているかを確認
+  await expect(page.getByText('お名前を入力してください')).toBeVisible();
+  await expect(
+    page.getByText('お問い合わせ内容を入力してください'),
+  ).toBeVisible();
+
+  await expect(
+    page.getByTitle('お問い合わせを受け付けました'),
+  ).not.toBeVisible();
+});
