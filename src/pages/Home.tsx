@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import reactLogo from '../assets/react.svg';
 import viteLogo from '../assets/vite.svg';
 import heroImg from '../assets/hero.png';
@@ -115,6 +116,14 @@ export const Home = () => {
 
       <div className="ticks"></div>
       <section id="spacer"></section>
+
+      <nav>
+        <ul>
+          <li>
+            <Link to="/details">詳細を見る</Link>
+          </li>
+        </ul>
+      </nav>
     </>
   );
 };
