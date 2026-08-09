@@ -13,6 +13,9 @@ const config: StorybookConfig = {
     "@storybook/addon-onboarding",
     "@storybook/addon-themes",
   ],
-  "framework": "@storybook/react-vite"
+  "framework": {
+    name: "@storybook/react-vite",
+    options: {}
+  },
 };
 export default config;
