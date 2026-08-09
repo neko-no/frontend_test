@@ -1,19 +1,22 @@
 export const allModes = {
-  mobile: {
+  "light mobile": {
+    theme: "light",
+    backgrounds: { value: "#ffffff" },
     viewport: 375,
   },
-  table: {
-    viewport: 768,
+  "dark mobile": {
+    theme: "dark",
+    backgrounds: { value: "#1a1a1a" },
+    viewport: 375,
   },
-  desktop: {
+  "light desktop": {
+    theme: "light",
+    backgrounds: { value: "#ffffff" },
     viewport: 1280,
   },
-  light: {
-    theme: "light",
-    backgrounds: {value: "#ffffff"},
-  },
-  dark: {
+  "dark desktop": {
     theme: "dark",
-    backgrounds: {value: "#1a1a1a"},
+    backgrounds: { value: "#1a1a1a" },
+    viewport: 1280,
   },
 } as const;
