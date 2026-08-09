@@ -43,6 +43,9 @@ devDependencies:
   '@storybook/addon-onboarding':
     specifier: ^10.5.7
     version: 10.5.7(storybook@10.5.7)
+  '@storybook/addon-themes':
+    specifier: ^10.5.7
+    version: 10.5.7(storybook@10.5.7)
   '@storybook/addon-vitest':
     specifier: ^10.5.7
     version: 10.5.7(@vitest/browser-playwright@4.1.10)(react@19.2.8)(storybook@10.5.7)(vitest@4.1.10)
@@ -1640,6 +1643,15 @@ packages:
       storybook: ^10.5.7
     dependencies:
       storybook: 10.5.7(@types/react@19.2.18)(prettier@3.9.6)(react@19.2.8)
+    dev: true
+
+  /@storybook/addon-themes@10.5.7(storybook@10.5.7):
+    resolution: {integrity: sha512-A3xMGyvfvPigSGiWiefgEd4MlV/taxeVsF7uj/oUO1DTrTEd9q2lIrwLtLmGvl/rUhpeP7yx33wrGronl8ym7A==}
+    peerDependencies:
+      storybook: ^10.5.7
+    dependencies:
+      storybook: 10.5.7(@types/react@19.2.18)(prettier@3.9.6)(react@19.2.8)
+      ts-dedent: 2.3.0
     dev: true
 
   /@storybook/addon-vitest@10.5.7(@vitest/browser-playwright@4.1.10)(react@19.2.8)(storybook@10.5.7)(vitest@4.1.10):

@@ -1,4 +1,5 @@
 import type { Preview } from '@storybook/react-vite';
+import { withThemeByClassName} from "@storybook/addon-themes";
 
 const preview: Preview = {
   tags: ['autodocs'],
@@ -22,6 +23,15 @@ const preview: Preview = {
       test: 'error',
     },
   },
+  decorators: [
+    withThemeByClassName({
+      themes:{
+        light: "light",
+        dark: "dark",
+      },
+      defaultTheme: "light"
+    })
+  ]
 };
 
 export default preview;
