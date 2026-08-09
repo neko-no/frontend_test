@@ -3,6 +3,11 @@ import type { Preview } from '@storybook/react-vite';
 const preview: Preview = {
   tags: ['autodocs'],
   parameters: {
+    chromatic: {
+      modes:{
+        desktop: allModes["desktop"],
+      },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

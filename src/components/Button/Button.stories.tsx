@@ -2,14 +2,14 @@ import type { Meta, StoryObj} from "@storybook/react-vite";
 import { Button } from "./Button";
 
 
-const meta = {
+const meta: Meta<typeof Button> = {
   component: Button,
   title: "Compnents/Button",
-} satisfies Meta<typeof Button>;
+};
 
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof Button>;
 
 export const Default: Story = {
   args:{
@@ -20,7 +20,7 @@ export const Default: Story = {
 
 export const Primary: Story = {
   args: {
-    variant: "Primary",
+    variant: "primary",
     children: "Primary",
   },
 };
