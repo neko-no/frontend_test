@@ -1,5 +1,5 @@
 import type { Meta, StoryObj} from "@storybook/react-vite";
-import { TimeStamp } from "./Timestamp";
+import { Timestamp } from "./Timestamp";
 
 const meta: Meta<typeof Timestamp> = {
   component: Timestamp,

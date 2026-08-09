@@ -1,13 +1,12 @@
 import type { Preview } from '@storybook/react-vite';
 import { withThemeByClassName} from "@storybook/addon-themes";
+import { allModes } from "./modes";
 
 const preview: Preview = {
   tags: ['autodocs'],
   parameters: {
     chromatic: {
-      modes:{
-        desktop: allModes["desktop"],
-      },
+      modes: allModes,
     },
     controls: {
       matchers: {
