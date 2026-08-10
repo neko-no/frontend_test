@@ -1,4 +1,4 @@
-import { hhtp, HttpResponse } from "msw";
+import { http, HttpResponse } from "msw";
 import { mockUsers} from "./data/users";
 
 

@@ -1,15 +1,10 @@
 import type { Preview } from '@storybook/react-vite';
-import { initialize, mswLoader} from "msw-storybook-addon";
+import { mswLoader } from "msw-storybook-addon/csf3";
 import { withThemeByClassName } from '@storybook/addon-themes';
 
 import { handlers} from "../src/mocks/handlers";
 import { allModes } from './modes';
 import '../src/index.css';
-
-
-initialize({
-  onUnhandledRequest: "bypass",
-});
 
 
 const preview: Preview = {
@@ -22,6 +17,7 @@ const preview: Preview = {
       defaultTheme: 'light',
     }),
   ],
+  loaders: [mswLoader()],
   parameters: {
     msw: {
       handlers: handlers,
@@ -37,7 +33,6 @@ const preview: Preview = {
         desktop: allModes['desktop'],
       },
     },
-    loaders: [mswLoader]
   },
 };
 
