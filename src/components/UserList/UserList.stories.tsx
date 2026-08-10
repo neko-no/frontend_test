@@ -1,7 +1,9 @@
+import { expect, within, waitFor} from "storybook/test";
 import type { Meta, StoryObj} from "@storybook/react-vite";
-import {http, HttpResponse } from "msw";
+import {http, HttpResponse, delay } from "msw";
 import { UserList } from "./UserList";
 import { mockUsers} from "../../mocks/data/users";
+
 
 
 const meta = {
@@ -44,7 +46,7 @@ export const EmptyState: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get("/api/users", () => {
+        http.get("/api/users", async () => {
           await delay(300)
           return HttpResponse.json([]);
         })
@@ -52,3 +54,29 @@ export const EmptyState: Story = {
     }
   }
 };
+
+export const LoadingAndSuccess: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get("/api/users", async () => {
+          await delay(800);
+          return HttpResponse.json(mockUsers);
+        })
+      ]
+    }
+  },
+  play: async ({canvas}) => {
+    expect(canvas.getByRole("status")).toHaveTextContent("読み込み中...");
+    expect(canvas.queryByRole("heading", {name: "ユーザー一覧"})).toBeNull();
+
+    await waitFor(
+      () => {
+        expect(canvas.getByRole("heading", {name: "ユーザー一覧"})).toBeInTheDocument();
+      },
+      {timeout: 2000},
+    )
+
+    expect(canvas.queryByRole("status")).toBeNull();
+  },
+}
