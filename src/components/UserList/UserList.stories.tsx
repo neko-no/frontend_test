@@ -234,3 +234,27 @@ export const UnauthorizedError: Story = {
     expect(errorMessage).toHaveTextContent("ユーザー情報の取得に失敗しました");
   },
 };
+
+export const CustomErrorMessage: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get("/api/users", () => {
+          return HttpResponse.json(
+            {
+              error:
+                "データベース接続に失敗しました。しばらくしてから再度お試しください。",
+            },
+            { status: 500 },
+          );
+        }),
+      ],
+    },
+  },
+  play: async ({ canvas }) => {
+    const errorMessage = await canvas.findByRole("alert");
+    expect(errorMessage).toHaveTextContent(
+      "データベース接続に失敗しました。しばらくしてから再度お試しください。",
+    );
+  },
+};
