@@ -140,3 +140,26 @@ export const ServerError: Story = {
   },
 };
 
+export const NetworkError: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.post("/api/users", () => {
+          return HttpResponse.error();
+        }),
+      ],
+    },
+  },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.type(canvas.getByLabelText("名前"), "田中太郎");
+    await userEvent.type(
+      canvas.getByLabelText("メールアドレス"),
+      "tanaka@example.com",
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "登録" }));
+
+    const errorMessage = await canvas.findByRole("alert");
+    expect(errorMessage).toBeInTheDocument();
+  },
+};
+
