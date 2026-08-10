@@ -1,6 +1,8 @@
 import type { Meta, StoryObj} from "@storybook/react-vite";
 import {http, HttpResponse } from "msw";
 import { UserList } from "./UserList";
+import { mockUsers} from "../../mocks/data/users";
+
 
 const meta = {
   component: UserList,
@@ -18,11 +20,7 @@ export const Default: Story = {
         http.get("/api/users", async () => {
           await delay(500);
 
-          return HttpResponse.json([
-            {id: 1, name: "田中太郎", email: "tanaka@example.com"},
-            {id: 2, name: "鈴木花子", email: "suzuki@example.com"},
-            {id: 3, name: "佐藤次郎", email: "sato@example.com"},
-          ])
+          return HttpResponse.json(mockUsers);
         })
       ]
     }
@@ -47,7 +45,7 @@ export const EmptyState: Story = {
     msw: {
       handlers: [
         http.get("/api/users", () => {
-          await delay(300);
+          await delay(300)
           return HttpResponse.json([]);
         })
       ]
