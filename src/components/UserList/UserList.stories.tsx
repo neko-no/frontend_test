@@ -201,3 +201,20 @@ export const ServerError: Story = {
     expect(canvas.queryByRole("heading", { name: "ユーザー一覧" })).toBeNull();
   },
 };
+
+export const NetworkError: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get("/api/users", () => {
+          return HttpResponse.error();
+        }),
+      ],
+    },
+  },
+  play: async ({ canvas }) => {
+    const errorMessage = await canvas.findByRole("alert");
+    expect(errorMessage).toBeInTheDocument();
+    expect(errorMessage.textContent).toBeTruthy();
+  },
+};
