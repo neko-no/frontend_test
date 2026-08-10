@@ -182,3 +182,22 @@ export const ManyUsers: Story = {
     expect(canvas.getByText("ユーザー50")).toBeInTheDocument();
   },
 };
+
+export const ServerError: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get("/api/users", () => {
+          return new HttpResponse(null, { status: 500 });
+        }),
+      ],
+    },
+  },
+  play: async ({ canvas }) => {
+    const errorMessage = await canvas.findByRole("alert");
+    expect(errorMessage).toBeInTheDocument();
+    expect(errorMessage).toHaveTextContent("ユーザー情報の取得に失敗しました");
+
+    expect(canvas.queryByRole("heading", { name: "ユーザー一覧" })).toBeNull();
+  },
+};
