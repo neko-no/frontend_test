@@ -69,3 +69,43 @@ export const SuccessfulSubmit: Story = {
 　},
 };
 
+export const ValidateRequestBody: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.post("/api/users", async ({ request }) => {
+          const body = await request.json();
+
+          if (!body.name || !body.email) {
+            return HttpResponse.json(
+              { error: "名前とメールアドレスは必須です" },
+              { status: 400 },
+            );
+          }
+
+          if (!body.email.includes("@")) {
+            return HttpResponse.json(
+              { error: "メールアドレスの形式が不正です" },
+              { status: 400 },
+            );
+          }
+
+          return HttpResponse.json({ id: 1, ...body }, { status: 201 });
+        }),
+      ],
+    },
+  },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.type(canvas.getByLabelText("名前"), "田中太郎");
+    await userEvent.type(
+      canvas.getByLabelText("メールアドレス"),
+      "tanaka@example.com",
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "登録" }));
+
+    await waitFor(() => {
+      expect(canvas.getByRole("status")).toBeInTheDocument();
+    });
+  },
+};
+
