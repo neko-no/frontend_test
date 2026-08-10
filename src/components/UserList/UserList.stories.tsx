@@ -2,7 +2,7 @@ import { expect, within, waitFor} from "storybook/test";
 import type { Meta, StoryObj} from "@storybook/react-vite";
 import {http, HttpResponse, delay } from "msw";
 import { UserList } from "./UserList";
-import { mockUsers} from "../../mocks/data/users";
+import { mockUsers, generateMockUsers} from "../../mocks/data/users";
 
 
 
@@ -159,5 +159,26 @@ export const VerifyListStructure: Story = {
       expect(within(item).getByText(user.name)).toBeInTheDocument();
       expect(within(item).getByText(user.email)).toBeInTheDocument();
     });
+  },
+};
+
+export const ManyUsers: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get("/api/users", () => {
+          return HttpResponse.json(generateMockUsers(50));
+        }),
+      ],
+    },
+  },
+  play: async ({ canvas }) => {
+    await canvas.findByRole("heading", { name: "ユーザー一覧" });
+
+    const listItems = canvas.getAllByRole("listitem");
+    expect(listItems).toHaveLength(50);
+
+    expect(canvas.getByText("ユーザー1")).toBeInTheDocument();
+    expect(canvas.getByText("ユーザー50")).toBeInTheDocument();
   },
 };
