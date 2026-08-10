@@ -134,3 +134,30 @@ export const VerifyUserData: Story = {
     expect(listItems).toHaveLength(3);
   },
 };
+
+export const VerifyListStructure: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get("/api/users", () => {
+          return HttpResponse.json(mockUsers);
+        }),
+      ],
+    },
+  },
+  play: async ({ canvas }) => {
+    await canvas.findByRole("heading", { name: "ユーザー一覧" });
+
+    const list = canvas.getByRole("list");
+    expect(list).toBeInTheDocument();
+
+    const listItems = canvas.getAllByRole("listitem");
+    expect(listItems).toHaveLength(3);
+
+    listItems.forEach((item, index) => {
+      const user = mockUsers[index];
+      expect(within(item).getByText(user.name)).toBeInTheDocument();
+      expect(within(item).getByText(user.email)).toBeInTheDocument();
+    });
+  },
+};
