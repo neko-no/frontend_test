@@ -80,3 +80,57 @@ export const LoadingAndSuccess: Story = {
     expect(canvas.queryByRole("status")).toBeNull();
   },
 }
+
+export const LoadingSpinner: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get("/api/users", async () => {
+          await delay(1000);
+          return HttpResponse.json(mockUsers);
+        }),
+      ],
+    },
+  },
+  play: async ({ canvas }) => {
+    const spinner = canvas.getByTestId("loading-spinner");
+    expect(spinner).toBeInTheDocument();
+    expect(spinner).toBeVisible();
+
+    await waitFor(
+      () => {
+        expect(canvas.queryByTestId("loading-spinner")).toBeNull();
+      },
+      { timeout: 2000 },
+    );
+
+    expect(
+      canvas.getByRole("heading", { name: "ユーザー一覧" }),
+    ).toBeInTheDocument();
+  },
+}
+
+export const VerifyUserData: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get("/api/users", () => {
+          return HttpResponse.json(mockUsers);
+        }),
+      ],
+    },
+  },
+  play: async ({ canvas }) => {
+    await canvas.findByRole("heading", { name: "ユーザー一覧" });
+
+    expect(canvas.getByText("田中太郎")).toBeInTheDocument();
+    expect(canvas.getByText("tanaka@example.com")).toBeInTheDocument();
+    expect(canvas.getByText("鈴木花子")).toBeInTheDocument();
+    expect(canvas.getByText("suzuki@example.com")).toBeInTheDocument();
+    expect(canvas.getByText("佐藤次郎")).toBeInTheDocument();
+    expect(canvas.getByText("sato@example.com")).toBeInTheDocument();
+
+    const listItems = canvas.getAllByRole("listitem");
+    expect(listItems).toHaveLength(3);
+  },
+};
