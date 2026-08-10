@@ -109,3 +109,34 @@ export const ValidateRequestBody: Story = {
   },
 };
 
+export const ServerError: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.post("/api/users", async () => {
+          await delay(300);
+          return HttpResponse.json(
+            { error: "サーバーエラーが発生しました" },
+            { status: 500 },
+          );
+        }),
+      ],
+    },
+  },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.type(canvas.getByLabelText("名前"), "田中太郎");
+    await userEvent.type(
+      canvas.getByLabelText("メールアドレス"),
+      "tanaka@example.com",
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "登録" }));
+
+    const errorMessage = await canvas.findByRole("alert");
+    expect(errorMessage).toHaveTextContent("サーバーエラーが発生しました");
+
+    expect(canvas.queryByRole("status")).toBeNull();
+
+    expect(canvas.getByRole("button", { name: "登録" })).toBeEnabled();
+  },
+};
+
