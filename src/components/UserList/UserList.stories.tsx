@@ -218,3 +218,19 @@ export const NetworkError: Story = {
     expect(errorMessage.textContent).toBeTruthy();
   },
 };
+
+export const UnauthorizedError: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get("/api/users", () => {
+          return new HttpResponse(null, { status: 401 });
+        }),
+      ],
+    },
+  },
+  play: async ({ canvas }) => {
+    const errorMessage = await canvas.findByRole("alert");
+    expect(errorMessage).toHaveTextContent("ユーザー情報の取得に失敗しました");
+  },
+};
