@@ -21,4 +21,20 @@ export const handlers = [
 
     return new HttpResponse(null, {status: 404});
   }),
+  http.post("/api/users", async({request}) => {
+    const newUser = await request.json();
+
+    if(!newUser.name || !newUser.email) {
+      return HttpResponse.json(
+        {error: "名前とメールアドレスは必須です"},
+        {status: 400}
+      )
+    }
+
+    return HttpResponse.json({
+      id: Date.now(),
+      ...newUser
+    }, {status:201})
+
+  })
 ]
