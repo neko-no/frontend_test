@@ -60,3 +60,45 @@ export const OptimisticUpdateSuccess: Story = {
     expect(canvas.queryByRole("alert")).toBeNull();
   }
 }
+
+export const OptimisticUpdateFailure: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get("/api/todos", () => {
+          return HttpResponse.json(mockTodos);
+        }),
+        http.patch("/api/todos/:id", async () => {
+          await delay(300);
+
+          return HttpResponse.json(
+            {error: "更新に失敗しました"},
+            {status: 500}
+          )
+        })
+      ]
+    }
+  },
+  play: async ({canvas, userEvent}) => {
+    await canvas.findByRole("heading", {name: "Todo リスト"});
+
+    const firstCheckbox = canvas.getAllByRole("checkbox")[0];
+    const firstTodoText = canvas.getByText("牛乳を買う");
+
+    expect(firstCheckbox).not.toBeChecked();
+    expect(firstTodoText).toHaveStyle({textDecoration: "none"});
+
+    await userEvent.click(firstCheckbox);
+
+    expect(firstCheckbox).toBeChecked();
+    expect(firstTodoText).toHaveStyle({textDecoration: "line-through"});
+
+    const errorMessage = await canvas.findByRole("alert");
+    expect(errorMessage).toHaveTextContent("更新に失敗しました");
+
+    await waitFor(() => {
+      expect(firstCheckbox).not.toBeChecked();
+    });
+    expect(firstTodoText).toHaveStyle({textDecoration: "none"});
+  }
+}
