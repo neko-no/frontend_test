@@ -1,5 +1,6 @@
 import { http, HttpResponse } from "msw";
 import { mockUsers } from "../data/users";
+import { createNotFoundResponse } from "../utils/errorHandlers";
 
 export const usersHandlers = [
   http.get("/api/users", () => {
@@ -10,7 +11,7 @@ export const usersHandlers = [
     const { userId } = params;
     const user = mockUsers.find((u) => u.id === Number(userId));
     if (!user) {
-      return new HttpResponse(null, { status: 404 });
+      return createNotFoundResponse("ユーザー");
     }
     return HttpResponse.json(user);
   }),
@@ -40,7 +41,7 @@ export const usersHandlers = [
     const body = await request.json();
     const user = mockUsers.find((u) => u.id === Number(userId));
     if (!user) {
-      return new HttpResponse(null, { status: 404 });
+      return createNotFoundResponse("ユーザー");
     }
     return HttpResponse.json({ ...user, ...body });
   }),
@@ -49,7 +50,7 @@ export const usersHandlers = [
     const { userId } = params;
     const user = mockUsers.find((u) => u.id === Number(userId));
     if (!user) {
-      return new HttpResponse(null, { status: 404 });
+      return createNotFoundResponse("ユーザー");
     }
     return new HttpResponse(null, { status: 204 });
   }),

@@ -1,5 +1,6 @@
 import { http, HttpResponse } from "msw";
 import { mockTodos } from "../data/todos";
+import { createNotFoundResponse } from "../utils/errorHandlers";
 
 export const todosHandlers = [
   http.get("/api/todos", () => {
@@ -11,7 +12,7 @@ export const todosHandlers = [
     const body = await request.json();
     const todo = mockTodos.find((t) => t.id === Number(id));
     if (!todo) {
-      return new HttpResponse(null, { status: 404 });
+      return createNotFoundResponse("Todo");
     }
     return HttpResponse.json({ ...todo, ...body });
   }),
