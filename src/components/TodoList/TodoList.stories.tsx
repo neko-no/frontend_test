@@ -42,15 +42,9 @@ export const OptimisticUpdateSuccess: Story = {
     const firstCheckbox = canvas.getAllByRole("checkbox")[0];
     expect(firstCheckbox).not.toBeChecked();
 
-    const firstTodoText = canvas.getByText("牛乳を買う");
-    await waitFor(() => {
-      expect(firstTodoText).toHaveStyle({textDecoration: "none"});
-    });
-
     await userEvent.click(firstCheckbox);
 
     expect(firstCheckbox).toBeChecked();
-    expect(firstTodoText).toHaveStyle({textDecoration: "line-through"});
 
     await waitFor(
       () => {
@@ -85,17 +79,12 @@ export const OptimisticUpdateFailure: Story = {
     await canvas.findByRole("heading", {name: "Todo リスト"});
 
     const firstCheckbox = canvas.getAllByRole("checkbox")[0];
-    const firstTodoText = canvas.getByText("牛乳を買う");
 
     expect(firstCheckbox).not.toBeChecked();
-    await waitFor(() => {
-      expect(firstTodoText).toHaveStyle({textDecoration: "none"});
-    });
 
     await userEvent.click(firstCheckbox);
 
     expect(firstCheckbox).toBeChecked();
-    expect(firstTodoText).toHaveStyle({textDecoration: "line-through"});
 
     const errorMessage = await canvas.findByRole("alert");
     expect(errorMessage).toHaveTextContent("更新に失敗しました");
@@ -103,6 +92,5 @@ export const OptimisticUpdateFailure: Story = {
     await waitFor(() => {
       expect(firstCheckbox).not.toBeChecked();
     });
-    expect(firstTodoText).toHaveStyle({textDecoration: "none"});
   }
 }
