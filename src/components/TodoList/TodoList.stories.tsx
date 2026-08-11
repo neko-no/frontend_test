@@ -43,7 +43,9 @@ export const OptimisticUpdateSuccess: Story = {
     expect(firstCheckbox).not.toBeChecked();
 
     const firstTodoText = canvas.getByText("牛乳を買う");
-    expect(firstTodoText).toHaveStyle({textDecoration: "none"});
+    await waitFor(() => {
+      expect(firstTodoText).toHaveStyle({textDecoration: "none"});
+    });
 
     await userEvent.click(firstCheckbox);
 
@@ -86,7 +88,9 @@ export const OptimisticUpdateFailure: Story = {
     const firstTodoText = canvas.getByText("牛乳を買う");
 
     expect(firstCheckbox).not.toBeChecked();
-    expect(firstTodoText).toHaveStyle({textDecoration: "none"});
+    await waitFor(() => {
+      expect(firstTodoText).toHaveStyle({textDecoration: "none"});
+    });
 
     await userEvent.click(firstCheckbox);
 
