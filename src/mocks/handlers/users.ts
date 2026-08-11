@@ -17,6 +17,14 @@ export const usersHandlers = [
 
   http.post("/api/users", async ({ request }) => {
     const body = await request.json();
+
+    if (!body.name || !body.email) {
+      return HttpResponse.json(
+        { error: "名前とメールアドレスは必須です" },
+        { status: 400 },
+      );
+    }
+
     return HttpResponse.json(
       {
         id: Date.now(),
